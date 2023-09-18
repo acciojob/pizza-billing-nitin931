@@ -2,26 +2,33 @@ package com.driver;
 
 public class Pizza {
 
-    private Boolean validBag;
-    private Boolean validCheese;
-    private Boolean validToppings;
+    private final int cheesePrice;
+    private final int toppingsPrice;
+    private final int paperBagPrice;
+    private boolean validBag;
+    private boolean validCheese;
+    private boolean validToppings;
+    private boolean validBill;
     private int price;
     private final Boolean isVeg;
     private String bill;
 
     public Pizza(Boolean isVeg){
         this.isVeg = isVeg;
-        validCheese = true;
-        validToppings = true;
-        validBag = true;
+
         if(isVeg){
             this.price = 300;
-            bill = "Veg pizza base price : 300\n";
+            toppingsPrice = 70;
         }
         else{
             this.price=400;
-            bill = "Non-veg pizza base price : 400\n";
+            toppingsPrice = 120;
         }
+
+        cheesePrice = 80;
+        paperBagPrice = 20;
+
+        bill = "Base Price Of The Pizza: " + price+"\n";
 
         // your code goes here
     }
@@ -64,40 +71,43 @@ public class Pizza {
 
     public void addExtraCheese(){
         // your code goes here
-        if(getValidCheese()){
-            bill += "Extra Cheese Price : 80\n";
-            price += 80;
-            setValidCheese(false);
+        if(!getValidCheese()){
+            price += cheesePrice;
+            setValidCheese(true);
         }
 
     }
 
     public void addExtraToppings(){
         // your code goes here
-        if(getValidToppings()){
-            if(isVeg){
-                bill += "Extra Toppings For Veg Pizza : 70\n";
-                price += 70;
-            }
-            else{
-                bill += "Extra Toppings For Non-veg Pizza : 120\n";
-                price += 120;
-            }
-            setValidToppings(false);
+        if(!getValidToppings()){
+            price += toppingsPrice;
+            setValidToppings(true);
         }
 
     }
 
     public void addTakeaway(){
-        if(getValidBag()){
-            bill += "Paper bag Price : 20\n";
-            price += 20;
+        if(!getValidBag()){
+            price += paperBagPrice;
         }
-        setValidBag(false);
+        setValidBag(true);
     }
 
     public String getBill(){
-        // your code goes here
-        return this.bill + "Total : "+price;
+        if(!validBill){
+            if(getValidCheese()){
+                bill += "Extra Cheese Added: " + cheesePrice + "\n";
+            }
+            if(getValidToppings()){
+                bill += "Extra Toppings Added: " + toppingsPrice + "\n";
+            }
+            if(validBag){
+                bill+= "Paperbag Added: " + paperBagPrice + "\n";
+            }
+            bill += "Total Price: "+price+"\n";
+            this.validBill = true;
+        }
+        return this.bill;
     }
 }
